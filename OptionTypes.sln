@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptionTypes", "OptionTypes\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptionTypes.Ef", "OptionTypes.Ef\OptionTypes.Ef.csproj", "{076BB13E-C9A7-42EC-9672-EDE66E47031B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject", "TestProject\TestProject.csproj", "{B1781203-CB80-45E6-8B16-CC0DF998ECB4}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptionTypes.Test", "OptionTypes.Test\OptionTypes.Test.csproj", "{06F30F25-CADB-4374-AAB4-1FCA1DD05324}"
 EndProject
 Global
@@ -25,10 +23,6 @@ Global
 		{076BB13E-C9A7-42EC-9672-EDE66E47031B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{076BB13E-C9A7-42EC-9672-EDE66E47031B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{076BB13E-C9A7-42EC-9672-EDE66E47031B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B1781203-CB80-45E6-8B16-CC0DF998ECB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B1781203-CB80-45E6-8B16-CC0DF998ECB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B1781203-CB80-45E6-8B16-CC0DF998ECB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B1781203-CB80-45E6-8B16-CC0DF998ECB4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{06F30F25-CADB-4374-AAB4-1FCA1DD05324}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{06F30F25-CADB-4374-AAB4-1FCA1DD05324}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06F30F25-CADB-4374-AAB4-1FCA1DD05324}.Release|Any CPU.ActiveCfg = Release|Any CPU
