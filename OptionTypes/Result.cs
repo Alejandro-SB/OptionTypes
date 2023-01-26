@@ -38,6 +38,23 @@ public sealed class Result<TOk, TErr>
     public TResult Match<TResult>(Func<TOk, TResult> ok, Func<TErr, TResult> err) => _isOk ? ok(_ok!) : err(_err!);
 
     /// <summary>
+    /// Matches the result depending on the state
+    /// </summary>
+    /// <param name="ok">The function to execute if the operation was successful</param>
+    /// <param name="err">The function to execute if the operation failed</param>
+    public void Match(Action<TOk> ok, Action<TErr> err)
+    {
+        if (_isOk)
+        {
+            ok(_ok!);
+        }
+        else
+        {
+            err(_err!);
+        }
+    }
+
+    /// <summary>
     /// Creates a new instance of <see cref="Result{TOk, TErr}"/> as a successful operation
     /// </summary>
     /// <param name="ok">The result of the successful operation</param>

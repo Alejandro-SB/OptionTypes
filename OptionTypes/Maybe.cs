@@ -49,7 +49,7 @@ public sealed class Maybe<T> : IEquatable<Maybe<T>>
     /// <typeparam name="TResult">The type of the result</typeparam>
     /// <param name="map">The mapper function to execute</param>
     /// <returns>If this instance has a value, <paramref name="map"/> will be executed and then flattened, if not, <see cref="Maybe{T}.None"/> will be returned</returns>
-    public Maybe<TResult> Bind<TResult>(Func<T, Maybe<TResult>> map)
+    public Maybe<TResult> Map<TResult>(Func<T, Maybe<TResult>> map)
         => _hasValue
         ? map(_value!)
         : Maybe<TResult>.None();
@@ -183,5 +183,16 @@ public static class Maybe
     /// <param name="map">The function that maps the value</param>
     /// <returns>A new task that has the original value mapped through <paramref name="map"/></returns>
     public static Task<Maybe<TResult>> Map<T, TResult>(this Task<Maybe<T>> task, Func<T, TResult> map)
+        => task.ContinueWith(r => r.Result.Map(map), TaskContinuationOptions.OnlyOnRanToCompletion);
+
+    /// <summary>
+    /// Creates a continuation of the current task that will map and flatten the value returned
+    /// </summary>
+    /// <typeparam name="T">The type of the value</typeparam>
+    /// <typeparam name="TResult">The type of the result</typeparam>
+    /// <param name="task">The task to attach the continuation to</param>
+    /// <param name="map">The function that maps the value</param>
+    /// <returns>A new task that has the original value mapped through <paramref name="map"/></returns>
+    public static Task<Maybe<TResult>> Map<T, TResult>(this Task<Maybe<T>> task, Func<T, Maybe<TResult>> map)
         => task.ContinueWith(r => r.Result.Map(map), TaskContinuationOptions.OnlyOnRanToCompletion);
 }

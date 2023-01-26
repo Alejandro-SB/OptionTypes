@@ -55,7 +55,7 @@ public class MaybeTests
         var instance = Maybe<int>.Some(value);
 
         var expected = BindOperation(value);
-        var result = instance.Bind(BindOperation);
+        var result = instance.Map(BindOperation);
 
         Assert.Equal(expected, result);
     }
@@ -64,7 +64,7 @@ public class MaybeTests
     public void Bind_Omits_Function_When_Maybe_Has_No_Value()
     {
         var instance = Maybe<int>.None();
-        var result = instance.Bind(BindOperation);
+        var result = instance.Map(BindOperation);
 
         Assert.Equal(Maybe<int>.None(), result);
     }
@@ -192,6 +192,21 @@ public class MaybeTests
 
         var expected = MapOperation(value);
         var result = await task.Map(MapOperation);
+
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(78)]
+    public async Task Map_Returning_Maybe_In_Task_Creates_A_Continuation_For_Completed_Tasks(int value)
+    {
+        var task = Task.Run(() =>
+        {
+            return Maybe<int>.Some(value);
+        });
+
+        var expected = BindOperation(value);
+        var result = await task.Map(BindOperation);
 
         Assert.Equal(expected, result);
     }
