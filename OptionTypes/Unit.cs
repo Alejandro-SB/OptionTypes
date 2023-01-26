@@ -1,5 +1,8 @@
 ﻿namespace OptionTypes;
 
+/// <summary>
+/// Represents an empty return of a function (<see langword="void"/>)
+/// </summary>
 public readonly struct Unit : IEquatable<Unit>, IComparable<Unit>
 {
     public static readonly Unit Default = new();
