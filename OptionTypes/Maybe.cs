@@ -82,6 +82,10 @@ public sealed class Maybe<T> : IEquatable<Maybe<T>>
     public T ValueOr(T value)
         => _hasValue ? _value! : value;
 
+    /// <summary>
+    /// Converts between a value and a Maybe instance
+    /// </summary>
+    /// <param name="value"></param>
     public static implicit operator Maybe<T>(T value)
         => new(value);
 
@@ -109,12 +113,15 @@ public sealed class Maybe<T> : IEquatable<Maybe<T>>
         ? $"Some {_value}"
         : "None";
 
+    /// <inheritdoc/>
     public override int GetHashCode()
         => _hasValue ? _value!.GetHashCode() : 0;
 
+    /// <inheritdoc/>
     public override bool Equals(object? obj)
         => obj is Maybe<T> maybe && maybe.Equals(this);
 
+    /// <inheritdoc/>
     public bool Equals(Maybe<T>? other)
     {
         if (other is null)
@@ -133,6 +140,9 @@ public sealed class Maybe<T> : IEquatable<Maybe<T>>
     }
 }
 
+/// <summary>
+/// Helper class to create <see cref="Maybe{T}"/> instances
+/// </summary>
 public static class Maybe
 {
     /// <summary>
