@@ -55,6 +55,12 @@ public sealed class Result<TOk, TErr>
     }
 
     /// <summary>
+    /// Converts the result into a <see cref="Maybe{TOk}"/>
+    /// </summary>
+    /// <returns><see cref="Maybe.Some{TOk}(TOk)" /> if the result is successful, <see cref="Maybe{TOk}.None"/> otherwise</returns>
+    public Maybe<TOk> Ok() => _isOk ? Maybe.Some(_ok!) : Maybe<TOk>.None();
+
+    /// <summary>
     /// Creates a new instance of <see cref="Result{TOk, TErr}"/> as a successful operation
     /// </summary>
     /// <param name="ok">The result of the successful operation</param>

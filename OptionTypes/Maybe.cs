@@ -19,7 +19,7 @@ public sealed class Maybe<T> : IEquatable<Maybe<T>>
     /// </summary>
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly T? _value;
-    
+
     private Maybe(T value)
     {
         _value = value ?? throw new ArgumentNullException(nameof(value));
@@ -83,11 +83,18 @@ public sealed class Maybe<T> : IEquatable<Maybe<T>>
         => _hasValue ? _value! : value;
 
     /// <summary>
+    /// Returns the value if exists or throws a <see cref="NullReferenceException"/>
+    /// </summary>
+    /// <returns>The value of the maybe</returns>
+    /// <exception cref="NullReferenceException"></exception>
+    public T Unwrap() => _value ?? throw new NullReferenceException();
+
+    /// <summary>
     /// Converts between a value and a Maybe instance
     /// </summary>
     /// <param name="value"></param>
     public static implicit operator Maybe<T>(T value)
-        => new(value);
+       => new(value);
 
     /// <summary>
     /// Creates an instance of <see cref="Maybe{T}"/> with the value <paramref name="value"/>
@@ -161,7 +168,7 @@ public static class Maybe
     /// <param name="value">The value that will be used to create the instance</param>
     /// <returns>The <see cref="Maybe{T}"/> instance</returns>
     public static Maybe<T> FromValue<T>(T? value)
-        where T: class
+        where T : class
         => value is null ? Maybe<T>.None() : Maybe<T>.Some(value);
 
     /// <summary>
