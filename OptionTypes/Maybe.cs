@@ -202,4 +202,22 @@ public static class Maybe
     /// <returns>A new task that has the original value mapped through <paramref name="map"/></returns>
     public static Task<Maybe<TResult>> Map<T, TResult>(this Task<Maybe<T>> task, Func<T, Maybe<TResult>> map)
         => task.ContinueWith(r => r.Result.Map(map), TaskContinuationOptions.OnlyOnRanToCompletion);
+
+    /// <summary>
+    /// Creates a continuation of the current task that will match against the <see cref="Maybe{T}"/> instance
+    /// </summary>
+    /// <typeparam name="TIn"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <param name="task">The task to attach the continuation to</param>
+    /// <param name="some">The function to run when exists value</param>
+    /// <param name="none">The function to run when does not exist a value</param>
+    /// <returns>A new task wrapping the result</returns>
+    public static Task<TResult> Match<TIn, TResult>(this Task<Maybe<TIn>> task, Func<TIn, TResult> some, Func<TResult> none)
+        => task.ContinueWith(t => t.Result.Match(some, none), TaskContinuationOptions.OnlyOnRanToCompletion);
+
+    public static Task<T> ValueOr<T>(this Task<Maybe<T>> task, T value)
+        => task.ContinueWith(t => t.Result.ValueOr(value), TaskContinuationOptions.OnlyOnRanToCompletion);
+
+    public static Task<T> Unwrap<T>(this Task<Maybe<T>> task)
+        => task.ContinueWith(t => t.Result.Unwrap(), TaskContinuationOptions.OnlyOnRanToCompletion);
 }
