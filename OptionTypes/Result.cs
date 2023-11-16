@@ -50,7 +50,7 @@ public class Result<TOk, TErr>
     /// </summary>
     /// <param name="ok">The function to execute if the operation was successful</param>
     /// <param name="err">The function to execute if the operation failed</param>
-    public void Match(Action<TOk> ok, Action<TErr> err)
+    public Unit Match(Action<TOk> ok, Action<TErr> err)
     {
         if (_isOk)
         {
@@ -60,6 +60,8 @@ public class Result<TOk, TErr>
         {
             err(_err!);
         }
+
+        return default;
     }
 
     /// <summary>

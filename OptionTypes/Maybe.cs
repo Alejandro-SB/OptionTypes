@@ -190,7 +190,7 @@ public static class Maybe
     /// <param name="map">The function that maps the value</param>
     /// <returns>A new task that has the original value mapped through <paramref name="map"/></returns>
     public static Task<Maybe<TResult>> Map<T, TResult>(this Task<Maybe<T>> task, Func<T, TResult> map)
-        => task.ContinueWith(r => r.Result.Map(map), TaskContinuationOptions.OnlyOnRanToCompletion);
+        => task.Then(t => t.Map(map));
 
     /// <summary>
     /// Creates a continuation of the current task that will map and flatten the value returned
@@ -201,7 +201,7 @@ public static class Maybe
     /// <param name="map">The function that maps the value</param>
     /// <returns>A new task that has the original value mapped through <paramref name="map"/></returns>
     public static Task<Maybe<TResult>> Map<T, TResult>(this Task<Maybe<T>> task, Func<T, Maybe<TResult>> map)
-        => task.ContinueWith(r => r.Result.Map(map), TaskContinuationOptions.OnlyOnRanToCompletion);
+        => task.Then(t => t.Map(map));
 
     /// <summary>
     /// Creates a continuation of the current task that will match against the <see cref="Maybe{T}"/> instance
@@ -213,11 +213,25 @@ public static class Maybe
     /// <param name="none">The function to run when does not exist a value</param>
     /// <returns>A new task wrapping the result</returns>
     public static Task<TResult> Match<TIn, TResult>(this Task<Maybe<TIn>> task, Func<TIn, TResult> some, Func<TResult> none)
-        => task.ContinueWith(t => t.Result.Match(some, none), TaskContinuationOptions.OnlyOnRanToCompletion);
+        => task.Then(t => t.Match(some, none));
 
+    /// <summary>
+    /// Creates a continuation of the current task that will return the <see cref="Maybe{T}"/> value or <paramref name="value"/> if <see cref="Maybe{T}.None"/>
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="task">The task to attach the continuation to</param>
+    /// <param name="value">The value to return in the task if none</param>
+    /// <returns>A new task wrapping the operation</returns>
     public static Task<T> ValueOr<T>(this Task<Maybe<T>> task, T value)
-        => task.ContinueWith(t => t.Result.ValueOr(value), TaskContinuationOptions.OnlyOnRanToCompletion);
+        => task.Then(t => t.ValueOr(value));
 
+    /// <summary>
+    /// Creates a continuation of the current task that will return the inner value inside <see cref="Maybe{T}"/> or throw if none
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="task">The task to attach the continuation to</param>
+    /// <returns>The value of the <see cref="Maybe{T}"/> or throws</returns>
+    /// <exception cref="ArgumentNullException"></exception>
     public static Task<T> Unwrap<T>(this Task<Maybe<T>> task)
-        => task.ContinueWith(t => t.Result.Unwrap(), TaskContinuationOptions.OnlyOnRanToCompletion);
+        => task.Then(t => t.Unwrap());
 }
