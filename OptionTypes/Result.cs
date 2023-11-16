@@ -7,7 +7,7 @@ namespace OptionTypes;
 /// </summary>
 /// <typeparam name="TOk">The type of the result if successful</typeparam>
 /// <typeparam name="TErr">The type of the result if an error occurs</typeparam>
-public sealed class Result<TOk, TErr>
+public class Result<TOk, TErr>
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly bool _isOk;
@@ -16,13 +16,21 @@ public sealed class Result<TOk, TErr>
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly TErr? _err;
 
-    private Result(TOk ok)
+    /// <summary>
+    /// Creates a new instance of the <see cref="Result{TOk, TErr}"/> class as an OK result
+    /// </summary>
+    /// <param name="ok">The value for the OK type</param>
+    protected Result(TOk ok)
     {
         _ok = ok;
         _isOk = true;
     }
 
-    private Result(TErr err)
+    /// <summary>
+    /// Creates a new instance of the <see cref="Result{TOk, TErr}"/> class as an Error result
+    /// </summary>
+    /// <param name="err">The value for the Error type</param>
+    protected Result(TErr err)
     {
         _err = err;
         _isOk = false;
