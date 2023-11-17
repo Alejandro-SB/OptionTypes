@@ -87,7 +87,7 @@ public sealed class Maybe<T> : IEquatable<Maybe<T>>
     /// </summary>
     /// <returns>The value of the maybe</returns>
     /// <exception cref="NullReferenceException"></exception>
-    public T Unwrap() => _value ?? throw new NullReferenceException();
+    public T Unwrap() => _hasValue ? _value! : throw new NullReferenceException();
 
     /// <summary>
     /// Converts between a value and a Maybe instance
