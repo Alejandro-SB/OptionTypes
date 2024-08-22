@@ -1,4 +1,8 @@
 ﻿namespace OptionTypes;
+
+/// <summary>
+/// Extensions for result type
+/// </summary>
 public static class ResultExtensions
 {
     /// <summary>

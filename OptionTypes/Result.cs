@@ -65,6 +65,38 @@ public class Result<TOk, TErr>
     }
 
     /// <summary>
+    /// Returns a new <see cref="Result{T, TErr}"/> with the value corresponding to <typeparamref name="TOk"/> transformed
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="map">The transformation to apply</param>
+    /// <returns>A new <see cref="Result{T, TErr}"/> transformed</returns>
+    public Result<T, TErr> Map<T>(Func<TOk, T> map)
+    {
+        if (_isOk)
+        {
+            return Result<T, TErr>.Ok(map(_ok!));
+        }
+
+        return Result<T, TErr>.Error(_err!);
+    }
+
+    /// <summary>
+    /// Returns a new <see cref="Result{TOk, T}"/> with the value corresponding to <typeparamref name="TErr"/> transformed
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="map">The transformation to apply</param>
+    /// <returns>A new <see cref="Result{TOk, T}"/> transformed</returns>
+    public Result<TOk, T> MapErr<T>(Func<TErr, T> map)
+    {
+        if (_isOk)
+        {
+            return Result<TOk, T>.Ok(_ok!);
+        }
+
+        return Result<TOk, T>.Error(map(_err!));
+    }
+
+    /// <summary>
     /// Converts the result into a <see cref="Maybe{TOk}"/>
     /// </summary>
     /// <returns><see cref="Maybe.Some{TOk}(TOk)" /> if the result is successful, <see cref="Maybe{TOk}.None"/> otherwise</returns>
