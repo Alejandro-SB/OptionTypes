@@ -1,4 +1,6 @@
-﻿namespace OptionTypes.Test;
+﻿using System.ComponentModel;
+
+namespace OptionTypes.Test;
 public class ResultTests
 {
     [Fact]
@@ -39,6 +41,30 @@ public class ResultTests
         var instance = Result<int, int>.Error(value);
 
         instance.Match(Throw<int>("Match executed ok function"), Pass);
+    }
+
+    [Fact]
+    public void Map_Returns_New_Error_With_Ok_Value_Mapped()
+    {
+        var expected = 15;
+        var initial = 0;
+        var result = Result<int, int>.Ok(initial);
+
+        var mappedResult = result.Map(_ => expected);
+
+        mappedResult.Match(v => Assert.Equal(expected, v), Throw<int>("Match executed on error"));
+    }
+
+    [Fact]
+    public void MapErr_Returns_New_Error_With_Err_Value_Mapped()
+    {
+        var expected = 15;
+        var initial = 0;
+        var result = Result<int, int>.Error(initial);
+
+        var mappedResult = result.MapErr(_ => expected);
+
+        mappedResult.Match(Throw<int>("Match executed on ok"), v => Assert.Equal(expected, v));
     }
 
     private static int OkOperation(int value) => value + 1;
