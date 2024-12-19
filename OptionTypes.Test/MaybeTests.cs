@@ -9,7 +9,7 @@ public class MaybeTests
     {
         var instance = Maybe<int>.Some(value);
 
-        var instanceValue = instance.ValueOr(() => throw new Exception("Has no value"));
+        var instanceValue = instance.Unwrap();
 
         Assert.Equal(value, instanceValue);
     }
@@ -118,37 +118,6 @@ public class MaybeTests
         Assert.Equal(expected, result);
     }
 
-    [Fact]
-    public void ValueOr_Returns_Instance_Value_Omitting_Function_When_Maybe_Has_Some_Value()
-    {
-        var expected = 3;
-        var instance = Maybe<int>.Some(expected);
-        var result = instance.ValueOr(() => 7);
-
-        Assert.Equal(expected, result);
-    }
-
-    [Fact]
-    public void ValueOr_Executes_Provider_Function_When_Maybe_Has_No_Value()
-    {
-        var expected = 3;
-        var instance = Maybe<int>.None();
-        var result = instance.ValueOr(() => expected);
-
-        Assert.Equal(expected, result);
-    }
-
-    [Fact]
-    public void Some_Creates_A_Maybe_Instance_With_Some_Value()
-    {
-        var expected = 5;
-        var instance = Maybe.Some(expected);
-
-        var result = instance.ValueOr(Throw<int>("Instance should have value"));
-
-        Assert.Equal(expected, result);
-    }
-
     [Theory]
     [InlineData(7)]
     [InlineData(null)]
@@ -209,6 +178,24 @@ public class MaybeTests
         var result = await task.Map(BindOperation);
 
         Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void IsNone_Returns_True_When_There_Is_No_Value()
+    {
+        var none = Maybe<int>.None();
+
+        Assert.True(none.IsNone(out _));
+    }
+
+    [Fact]
+    public void IsNone_Returns_False_When_There_Is_No_Value()
+    {
+        var expectedValue = 1;
+        var some = Maybe.Some(expectedValue);
+
+        Assert.False(some.IsNone(out var value));
+        Assert.Equal(expectedValue, value);
     }
 
     private static int MapOperation(int v) => v + 1;

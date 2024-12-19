@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace OptionTypes.Test;
+﻿namespace OptionTypes.Test;
 public class ResultTests
 {
     [Fact]
@@ -18,7 +16,7 @@ public class ResultTests
     public void Error_Creates_A_Failed_Operation_Result()
     {
         var value = 7;
-        var instance = Result<int, int>.Error(7);
+        var instance = Result<int, int>.Err(7);
         var expected = ErrOperation(value);
         var result = instance.Match(OkOperation, ErrOperation);
 
@@ -38,7 +36,7 @@ public class ResultTests
     public void Match_When_Result_Is_Error_Executes_Error_Action()
     {
         var value = 13;
-        var instance = Result<int, int>.Error(value);
+        var instance = Result<int, int>.Err(value);
 
         instance.Match(Throw<int>("Match executed ok function"), Pass);
     }
@@ -60,11 +58,33 @@ public class ResultTests
     {
         var expected = 15;
         var initial = 0;
-        var result = Result<int, int>.Error(initial);
+        var result = Result<int, int>.Err(initial);
 
         var mappedResult = result.MapErr(_ => expected);
 
         mappedResult.Match(Throw<int>("Match executed on ok"), v => Assert.Equal(expected, v));
+    }
+
+    [Fact]
+    public void IsErr_Returns_True_When_There_Is_An_Error()
+    {
+        var expectedText = "ERROR";
+        var result = Result<string, string>.Err(expectedText);
+
+        Assert.True(result.IsErr(out var errorText));
+
+        Assert.Equal(expectedText, errorText);
+    }
+
+    [Fact]
+    public void IsErr_Returns_False_When_There_Is_No_Error()
+    {
+        var expectedText = "OK";
+        var result = Result<string, string>.Ok(expectedText);
+
+        Assert.False(result.IsErr(out var ok, out var errorText));
+        Assert.Null(errorText);
+        Assert.Equal(expectedText, ok);
     }
 
     private static int OkOperation(int value) => value + 1;

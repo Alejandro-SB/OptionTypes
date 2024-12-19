@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace OptionTypes;
 
@@ -67,14 +68,6 @@ public sealed class Maybe<T> : IEquatable<Maybe<T>>
         : none();
 
     /// <summary>
-    /// Returns the value of this instance or executes <paramref name="valueProvider"/> if none
-    /// </summary>
-    /// <param name="valueProvider">Function that will return the value if there is no value in this instance</param>
-    /// <returns>The value of this instance or the value returned by <paramref name="valueProvider"/></returns>
-    public T ValueOr(Func<T> valueProvider)
-        => _hasValue ? _value! : valueProvider();
-
-    /// <summary>
     /// Returns the value of this instance or <paramref name="value"/> if none
     /// </summary>
     /// <param name="value">The value returned if this instance has no value</param>
@@ -83,11 +76,23 @@ public sealed class Maybe<T> : IEquatable<Maybe<T>>
         => _hasValue ? _value! : value;
 
     /// <summary>
-    /// Returns the value if exists or throws a <see cref="NullReferenceException"/>
+    /// Returns the value if exists or throws a <see cref="NullReferenceException"/>. This method should be avoided whenever possible in favour of <see cref="IsNone(out T)"/>
     /// </summary>
     /// <returns>The value of the maybe</returns>
     /// <exception cref="NullReferenceException"></exception>
     public T Unwrap() => _hasValue ? _value! : throw new NullReferenceException();
+
+    /// <summary>
+    /// Returns <see langword="true" /> and assigns <paramref name="value"/> when it has value, <see langword="false"/> otherwise.
+    /// </summary>
+    /// <param name="value">The value contained in this instance, or <see langword="default"/> if no value present</param>
+    /// <returns><see langword="true" /> when a value exists, <see langword="false" /> otherwise</returns>
+    public bool IsNone([NotNullWhen(true)]out T? value)
+    {
+        value = _value!;
+
+        return !_hasValue;
+    }
 
     /// <summary>
     /// Converts between a value and a Maybe instance
@@ -97,10 +102,11 @@ public sealed class Maybe<T> : IEquatable<Maybe<T>>
        => new(value);
 
     /// <summary>
-    /// Creates an instance of <see cref="Maybe{T}"/> with the value <paramref name="value"/>
+    /// Creates an instance of <see cref="Maybe{T}"/> with the value <paramref name="value"/>. This method throws if <paramref name="value"/> is <see langword="null" />
     /// </summary>
     /// <param name="value">The value of this instance</param>
     /// <returns>The <see cref="Maybe{T}"/> instance created</returns>
+    /// <exception cref="ArgumentNullException"  />
     public static Maybe<T> Some(T value)
         => new(value);
 

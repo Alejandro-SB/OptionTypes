@@ -7,7 +7,7 @@ internal sealed class MaybeValueConverter<T> : ValueConverter<Maybe<T>, T?>
 {
     public MaybeValueConverter()
 #pragma warning disable EF1001 // Internal EF Core API usage.
-        : base(v => v.ValueOr(() => null!), v => Maybe.FromValue(v), true)
+        : base(v => v.ValueOr(null!), v => Maybe.FromValue(v), true)
 #pragma warning restore EF1001 // Internal EF Core API usage.
     {
     }

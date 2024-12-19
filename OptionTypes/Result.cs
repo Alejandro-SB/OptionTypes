@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace OptionTypes;
 
@@ -77,7 +78,7 @@ public class Result<TOk, TErr>
             return Result<T, TErr>.Ok(map(_ok!));
         }
 
-        return Result<T, TErr>.Error(_err!);
+        return Result<T, TErr>.Err(_err!);
     }
 
     /// <summary>
@@ -93,7 +94,7 @@ public class Result<TOk, TErr>
             return Result<TOk, T>.Ok(_ok!);
         }
 
-        return Result<TOk, T>.Error(map(_err!));
+        return Result<TOk, T>.Err(map(_err!));
     }
 
     /// <summary>
@@ -101,6 +102,32 @@ public class Result<TOk, TErr>
     /// </summary>
     /// <returns><see cref="Maybe.Some{TOk}(TOk)" /> if the result is successful, <see cref="Maybe{TOk}.None"/> otherwise</returns>
     public Maybe<TOk> Ok() => _isOk ? Maybe.Some(_ok!) : Maybe<TOk>.None();
+
+    /// <summary>
+    /// Returns <see langword="true" /> and assigns <paramref name="err"/> when <see cref="Result{TOk, TErr}"/> is an Error, <see langword="false"/> otherwise.
+    /// </summary>
+    /// <param name="err">The error contained in this instance, or <see langword="default"/> if no value present</param>
+    /// <returns><see langword="true" /> when a value exists, <see langword="false" /> otherwise</returns>
+    public bool IsErr([NotNullWhen(true)]out TErr? err)
+    {
+        err = _err;
+
+        return !_isOk;
+    }
+
+    /// <summary>
+    /// Returns <see langword="true" /> and assigns <paramref name="err"/> when <see cref="Result{TOk, TErr}"/> is an Error, <see langword="false"/> and assigns <paramref name="ok"/> otherwise.
+    /// </summary>
+    /// <param name="ok">The ok parameter contained in this instance, or <see langword="default"/> if no value present</param>
+    /// <param name="err">The error contained in this instance, or <see langword="default"/> if no value present</param>
+    /// <returns><see langword="true" /> when a value exists, <see langword="false" /> otherwise</returns>
+    public bool IsErr([NotNullWhen(false)]out TOk? ok,  [NotNullWhen(true)] out TErr? err)
+    {
+        err = _err;
+        ok = _ok;
+
+        return !_isOk;
+    }
 
     /// <summary>
     /// Creates a new instance of <see cref="Result{TOk, TErr}"/> as a successful operation
@@ -114,5 +141,5 @@ public class Result<TOk, TErr>
     /// </summary>
     /// <param name="err">The result of the failed operation</param>
     /// <returns>An instance of <see cref="Result{TOk, TErr}"/> as a failed operation</returns>
-    public static Result<TOk, TErr> Error(TErr err) => new(err);
+    public static Result<TOk, TErr> Err(TErr err) => new(err);
 }
