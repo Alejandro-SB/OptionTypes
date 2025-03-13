@@ -27,7 +27,7 @@ public sealed class Maybe<T> : IEquatable<Maybe<T>>
         _hasValue = true;
     }
 
-    private Maybe()
+    private Maybe() 
     {
         _value = default;
         _hasValue = false;
@@ -87,7 +87,7 @@ public sealed class Maybe<T> : IEquatable<Maybe<T>>
     /// </summary>
     /// <param name="value">The value contained in this instance, or <see langword="default"/> if no value present</param>
     /// <returns><see langword="true" /> when a value exists, <see langword="false" /> otherwise</returns>
-    public bool IsNone([NotNullWhen(true)]out T? value)
+    public bool IsNone([NotNullWhen(false)]out T? value)
     {
         value = _value!;
 
