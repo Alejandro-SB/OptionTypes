@@ -130,6 +130,26 @@ public class Result<TOk, TErr>
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"></exception>
+    public TOk Unwrap()
+    {
+        return _isOk ? _ok! : throw new ArgumentNullException();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public Result<TOk, TErr> OrReturn()
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
     /// Creates a new instance of <see cref="Result{TOk, TErr}"/> as a successful operation
     /// </summary>
     /// <param name="ok">The result of the successful operation</param>

@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<LangVersion>11.0</LangVersion>
+		<Nullable>enable</Nullable>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<Title>OptionTypes.Fody</Title>
+		<Authors>Alejandro-SB</Authors>
+		<Description>Contains option types to use in C#</Description>
+		<PackageProjectUrl>https://github.com/Alejandro-SB/OptionTypes</PackageProjectUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/Alejandro-SB/OptionTypes</RepositoryUrl>
+		<PackageTags>functional programming;option types;monad</PackageTags>
+		<AssemblyVersion>$(AssemblyVersion)</AssemblyVersion>
+		<FileVersion>$(AssemblyVersion)</FileVersion>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<Version></Version>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="FodyHelpers" Version="6.9.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\OptionTypes\OptionTypes.csproj" />
+	</ItemGroup>
+
+</Project>

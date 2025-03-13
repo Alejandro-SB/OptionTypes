@@ -9,6 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptionTypes.Ef", "OptionTyp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptionTypes.Test", "OptionTypes.Test\OptionTypes.Test.csproj", "{06F30F25-CADB-4374-AAB4-1FCA1DD05324}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptionTypes.Fody", "OptionTypes.Fody\OptionTypes.Fody.csproj", "{1E50CC45-7779-47F8-881A-053EBC78EFD3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptionTypesFodyAddin", "OptionTypesFodyAddin\OptionTypesFodyAddin.csproj", "{048E023A-E42D-4D3B-A71A-818208284FA4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1E50CC45-7779-47F8-881A-053EBC78EFD3} = {1E50CC45-7779-47F8-881A-053EBC78EFD3}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +34,14 @@ Global
 		{06F30F25-CADB-4374-AAB4-1FCA1DD05324}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06F30F25-CADB-4374-AAB4-1FCA1DD05324}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06F30F25-CADB-4374-AAB4-1FCA1DD05324}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E50CC45-7779-47F8-881A-053EBC78EFD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E50CC45-7779-47F8-881A-053EBC78EFD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E50CC45-7779-47F8-881A-053EBC78EFD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E50CC45-7779-47F8-881A-053EBC78EFD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{048E023A-E42D-4D3B-A71A-818208284FA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{048E023A-E42D-4D3B-A71A-818208284FA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{048E023A-E42D-4D3B-A71A-818208284FA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{048E023A-E42D-4D3B-A71A-818208284FA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
