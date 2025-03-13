@@ -8,13 +8,10 @@ namespace OptionTypes;
 /// </summary>
 /// <typeparam name="TOk">The type of the result if successful</typeparam>
 /// <typeparam name="TErr">The type of the result if an error occurs</typeparam>
-public class Result<TOk, TErr>
+public class Result<TOk, TErr> : IEquatable<Result<TOk, TErr>>
 {
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly bool _isOk;
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly TOk? _ok;
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly TErr? _err;
 
     /// <summary>
@@ -98,6 +95,16 @@ public class Result<TOk, TErr>
     }
 
     /// <summary>
+    /// Returns the <typeparamref name="TOk"/> value if result was ok or throws <see cref="ArgumentException"/>. This method should be avoided whenever possible in favour of <see cref="IsErr(out TErr?)"></see> or <see cref="IsErr(out TOk?, out TErr?)"></see>
+    /// </summary>
+    /// <returns>The <typeparamref name="TOk"/> value or throws</returns>
+    /// <exception cref="ArgumentException"></exception>
+    public TOk Unwrap()
+    {
+        return _isOk ? _ok! : throw new ArgumentException("Result is in an error state");
+    }
+
+    /// <summary>
     /// Converts the result into a <see cref="Maybe{TOk}"/>
     /// </summary>
     /// <returns><see cref="Maybe.Some{TOk}(TOk)" /> if the result is successful, <see cref="Maybe{TOk}.None"/> otherwise</returns>
@@ -108,7 +115,7 @@ public class Result<TOk, TErr>
     /// </summary>
     /// <param name="err">The error contained in this instance, or <see langword="default"/> if no value present</param>
     /// <returns><see langword="true" /> when a value exists, <see langword="false" /> otherwise</returns>
-    public bool IsErr([NotNullWhen(true)]out TErr? err)
+    public bool IsErr([NotNullWhen(true)] out TErr? err)
     {
         err = _err;
 
@@ -121,7 +128,7 @@ public class Result<TOk, TErr>
     /// <param name="ok">The ok parameter contained in this instance, or <see langword="default"/> if no value present</param>
     /// <param name="err">The error contained in this instance, or <see langword="default"/> if no value present</param>
     /// <returns><see langword="true" /> when a value exists, <see langword="false" /> otherwise</returns>
-    public bool IsErr([NotNullWhen(false)]out TOk? ok,  [NotNullWhen(true)] out TErr? err)
+    public bool IsErr([NotNullWhen(false)] out TOk? ok, [NotNullWhen(true)] out TErr? err)
     {
         err = _err;
         ok = _ok;
@@ -142,4 +149,27 @@ public class Result<TOk, TErr>
     /// <param name="err">The result of the failed operation</param>
     /// <returns>An instance of <see cref="Result{TOk, TErr}"/> as a failed operation</returns>
     public static Result<TOk, TErr> Err(TErr err) => new(err);
+
+    /// <inheritdoc />
+    public override bool Equals(object? obj)
+    {
+        return obj is Result<TOk, TErr> result && result.Equals(this);
+    }
+
+    /// <inheritdoc />
+    public bool Equals(Result<TOk, TErr>? other)
+    {
+        return other is not null
+            && other._isOk == _isOk
+            && (
+                (_isOk && _ok!.Equals(other._ok))
+                || (!_isOk && _err!.Equals(other._err))
+                );
+    }
+
+    /// <inheritdoc />
+    public override int GetHashCode()
+    {
+        return _isOk ? _ok!.GetHashCode() : _err!.GetHashCode();
+    }
 }
