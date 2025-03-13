@@ -12,13 +12,11 @@ public sealed class Maybe<T> : IEquatable<Maybe<T>>
     /// <summary>
     /// If true, a value has been supplied
     /// </summary>
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly bool _hasValue;
 
     /// <summary>
     /// The value of the instance
     /// </summary>
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly T? _value;
 
     private Maybe(T value)
