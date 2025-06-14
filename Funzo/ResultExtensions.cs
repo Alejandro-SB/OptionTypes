@@ -1,4 +1,4 @@
-﻿namespace OptionTypes;
+﻿namespace Funzo;
 
 /// <summary>
 /// Extensions for result type
@@ -6,13 +6,13 @@
 public static class ResultExtensions
 {
     /// <summary>
-    /// Converts the result of a task to a <see cref="Maybe{T}"/>
+    /// Converts the result of a task to a <see cref="Option{T}"/>
     /// </summary>
     /// <typeparam name="TOk"></typeparam>
     /// <typeparam name="TErr"></typeparam>
     /// <param name="task">The task to extract the result from</param>
     /// <returns>A task wrapping the result</returns>
-    public static Task<Maybe<TOk>> Ok<TOk, TErr>(this Task<Result<TOk, TErr>> task)
+    public static Task<Option<TOk>> Ok<TOk, TErr>(this Task<Result<TOk, TErr>> task)
     {
         return task.Then(t => t.Ok());
     }

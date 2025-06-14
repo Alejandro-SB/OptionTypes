@@ -1,7 +1,6 @@
-﻿using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
-namespace OptionTypes;
+namespace Funzo;
 
 /// <summary>
 /// Represents the result of an operation
@@ -95,6 +94,56 @@ public class Result<TOk, TErr> : IEquatable<Result<TOk, TErr>>
     }
 
     /// <summary>
+    /// Applies an action to the result if the value is <typeparamref name="TOk"/>
+    /// </summary>
+    /// <param name="action">The action to perform</param>
+    public void Inspect(Action<TOk> action)
+    {
+        if (_isOk)
+        {
+            action(_ok!);
+        }
+    }
+
+    /// <summary>
+    /// Applies an action to the result if the value is <typeparamref name="TOk"/>
+    /// </summary>
+    /// <param name="action">The action to perform</param>
+    /// <returns></returns>
+    public async Task Inspect(Func<TOk, Task> action)
+    {
+        if (_isOk)
+        {
+            await action(_ok!);
+        }
+    }
+
+    /// <summary>
+    /// Applies an action to the result if the value is <typeparamref name="TErr"/>
+    /// </summary>
+    /// <param name="action">The action to perform</param>
+    public void InspectErr(Action<TErr> action)
+    {
+        if (!_isOk)
+        {
+            action(_err!);
+        }
+    }
+
+    /// <summary>
+    /// Applies an action to the result if the value is <typeparamref name="TErr"/>
+    /// </summary>
+    /// <param name="action">The action to perform</param>
+    /// <returns></returns>
+    public async Task InspectErr(Func<TErr, Task> action)
+    {
+        if (!_isOk)
+        {
+            await action(_err!);
+        }
+    }
+
+    /// <summary>
     /// Returns the <typeparamref name="TOk"/> value if result was ok or throws <see cref="ArgumentException"/>. This method should be avoided whenever possible in favour of <see cref="IsErr(out TErr?)"></see> or <see cref="IsErr(out TOk?, out TErr?)"></see>
     /// </summary>
     /// <returns>The <typeparamref name="TOk"/> value or throws</returns>
@@ -105,10 +154,10 @@ public class Result<TOk, TErr> : IEquatable<Result<TOk, TErr>>
     }
 
     /// <summary>
-    /// Converts the result into a <see cref="Maybe{TOk}"/>
+    /// Converts the result into a <see cref="Option{TOk}"/>
     /// </summary>
-    /// <returns><see cref="Maybe.Some{TOk}(TOk)" /> if the result is successful, <see cref="Maybe{TOk}.None"/> otherwise</returns>
-    public Maybe<TOk> Ok() => _isOk ? Maybe.Some(_ok!) : Maybe<TOk>.None();
+    /// <returns><see cref="Option.Some{TOk}(TOk)" /> if the result is successful, <see cref="Option{TOk}.None"/> otherwise</returns>
+    public Option<TOk> Ok() => _isOk ? Option.Some(_ok!) : Option<TOk>.None();
 
     /// <summary>
     /// Returns <see langword="true" /> and assigns <paramref name="err"/> when <see cref="Result{TOk, TErr}"/> is an Error, <see langword="false"/> otherwise.
@@ -162,8 +211,8 @@ public class Result<TOk, TErr> : IEquatable<Result<TOk, TErr>>
         return other is not null
             && other._isOk == _isOk
             && (
-                (_isOk && _ok!.Equals(other._ok))
-                || (!_isOk && _err!.Equals(other._err))
+                _isOk && _ok!.Equals(other._ok)
+                || !_isOk && _err!.Equals(other._err)
                 );
     }
 

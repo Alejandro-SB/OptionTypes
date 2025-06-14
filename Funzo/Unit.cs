@@ -1,4 +1,4 @@
-﻿namespace OptionTypes;
+﻿namespace Funzo;
 
 /// <summary>
 /// Represents an empty return of a function (<see langword="void"/>)

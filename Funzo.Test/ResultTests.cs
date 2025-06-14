@@ -1,4 +1,7 @@
-﻿namespace OptionTypes.Test;
+﻿using Funzo;
+using System.Text.Json;
+
+namespace Funzo.Test;
 public class ResultTests
 {
     [Fact]
@@ -87,9 +90,65 @@ public class ResultTests
         Assert.Equal(expectedText, ok);
     }
 
+    [Fact]
+    public void Inspect_Is_Called_When_Result_Is_Ok()
+    {
+        var result = Result<string, string>.Ok("");
+
+        var test = "TEST";
+
+        result.Inspect(_ => test = null);
+
+        Assert.Null(test);
+    }
+
+    [Fact]
+    public void Inspect_Is_Not_Called_When_Result_Is_Err()
+    {
+        var result = Result<string, string>.Err("");
+
+        var test = "TEST";
+
+        result.Inspect(_ => test = null);
+
+        Assert.NotNull(test);
+    }
+
+    [Fact]
+    public async Task Inspect_Is_Called_Async_When_Result_Is_Ok()
+    {
+        var result = Result<string, string>.Ok("TEST STRING");
+
+        var test = "TEST";
+
+        await result.Inspect(_ =>
+        {
+            test = null;
+            return Task.CompletedTask;
+        });
+
+        Assert.Null(test);
+    }
+
+    [Fact]
+    public async Task Inspect_Is_Not_Called_Async_When_Result_Is_Err()
+    {
+        var result = Result<string, string>.Err("");
+
+        var test = "TEST";
+
+        await result.Inspect(_ =>
+        {
+            test = null;
+            return Task.CompletedTask;
+        });
+
+        Assert.NotNull(test);
+    }
+
     private static int OkOperation(int value) => value + 1;
     private static int ErrOperation(int value) => value - 1;
     private static void Pass<T>(T _) { }
-    private static Action<T> Throw<T>(string message) => (T _) => throw new Exception(message);
+    private static Action<T> Throw<T>(string message) => (_) => throw new Exception(message);
 
 }

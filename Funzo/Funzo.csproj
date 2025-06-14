@@ -6,13 +6,13 @@
 		<LangVersion>11.0</LangVersion>
 		<Nullable>enable</Nullable>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<Title>OptionTypes</Title>
+		<Title>Funzo</Title>
 		<Authors>Alejandro-SB</Authors>
-		<Description>Contains option types to use in C#</Description>
-		<PackageProjectUrl>https://github.com/Alejandro-SB/OptionTypes</PackageProjectUrl>
+		<Description>Contains Result, Option and Union types to use in C#</Description>
+		<PackageProjectUrl>https://github.com/Alejandro-SB/Funzo</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<RepositoryUrl>https://github.com/Alejandro-SB/OptionTypes</RepositoryUrl>
-		<PackageTags>functional programming;option types;monad</PackageTags>
+		<RepositoryUrl>https://github.com/Alejandro-SB/Funzo</RepositoryUrl>
+		<PackageTags>functional programming;option types;monad;union types;discriminated unions;result</PackageTags>
 		<AssemblyVersion>$(AssemblyVersion)</AssemblyVersion>
 		<FileVersion>$(AssemblyVersion)</FileVersion>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>

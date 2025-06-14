@@ -7,7 +7,7 @@
 - [Description](#description)
 - [Usage](#usage)
     - [Unit](#unit)
-    - [Maybe](#maybe)
+    - [Option](#option)
     - [Result](#result)
 - [Design Philosophy](#design-philosophy)
 - [What's missing](#whats-missing)
@@ -16,7 +16,7 @@
 ## Description
 _OptionTypes_ is a package to use some useful monads in C#. It contains 2 classes:
 
-- The `Maybe<T>` class allows to create an item of type T that may have no value. This value cannot be accessed in an unsafe manner by design, making really easy to completely remove null references from your code and reducing the number of `NullReferenceException` exceptions thrown.
+- The `Option<T>` class allows to create an item of type T that may have no value. This value cannot be accessed in an unsafe manner by design, making really easy to completely remove null references from your code and reducing the number of `NullReferenceException` exceptions thrown.
 
 - The `Result` class represents an operation that has been completed. This reduces the number of `try/catch` blocks needed to manage application flow, making error management explicit and ending with more reliable code.
 
@@ -25,29 +25,29 @@ _OptionTypes_ is a package to use some useful monads in C#. It contains 2 classe
 ### Unit
 Unit is a helper type to represent the absence of value (think of it as void). Because in functional programming every function returns a value, it is added here for compatibility.
 
-### Maybe
+### Option
 
-Create a new Maybe using one of the helper methods (`Maybe.FromValue`, `Maybe.Some`, and `Maybe.None`):
+Create a new Option using one of the helper methods (`Option.FromValue`, `Option.Some`, and `Option.None`):
 ```Csharp
-var maybeInt = Maybe.Some(1);
-var maybeFloat = Maybe.FromValue(12);
+var optionInt = Option.Some(1);
+var optionFloat = Option.FromValue(12);
 string? nullableString = null;
-var maybeString = Maybe.FromValue(nullableString);
+var optionString = Option.FromValue(nullableString);
 ```
 
 Map its content using the `Map` method:
 ```Csharp
-var maybeText = await ReadTextFromFile(filePath);
+var optionText = await ReadTextFromFile(filePath);
 
-var uppercaseText = maybeText.Map(text => text.ToUpper());
+var uppercaseText = optionText.Map(text => text.ToUpper());
 ```
 
-You can also map to another `Maybe` and it will be flatten:
+You can also map to another `Option` and it will be flatten:
 ```Csharp
-var number = Maybe.FromValue(1);
+var number = Option.FromValue(1);
 
-// double type is Maybe<int>
-var double = number.Map(x => Maybe.FromValue(x * 2));
+// double type is Option<int>
+var double = number.Map(x => Option.FromValue(x * 2));
 ```
 
 If you want to check both options, use the `Match` method:
@@ -60,15 +60,15 @@ var userName = user.Match(x => x.Name, () => "User not found");
 
 In case you want to provide a fallback value, you can use `ValueOr`:
 ```Csharp
-var maybeUserName = await GetUserName();
-var userName = maybeUserName.ValueOr("Unknown user");
+var optionUserName = await GetUserName();
+var userName = optionUserName.ValueOr("Unknown user");
 ```
 
-In case you want to do something if there is no value present, you can use the `IsNone` method:
+In case you want to do something if there is a value present, you can use the `IsSome` method:
 ```Csharp
-Maybe<User> maybeUser = await GetUser();
+Option<User> optionUser = await GetUser();
 
-if(maybeUser.IsNone(out User user))
+if(!optionUser.IsSome(out User user))
 {
     return Results.NotFound();
 }
@@ -76,21 +76,19 @@ if(maybeUser.IsNone(out User user))
 var posts = postService.GetPostsByUserId(user.Id);
 ```
 
-NOTE: There is no `IsSome` method and it is not planned. This method was added to allow for early returns when needed (like the example).
-
 You can force the value out using the `Unwrap` method. This approach is **not recommended**:
 ```Csharp
-var maybeValue = Maybe.Some(1);
+var optionValue = Option.Some(1);
 
-var value = maybeValue.Unwrap() // 1
+var value = optionValue.Unwrap() // 1
 
-var maybeString = Maybe<string>.None();
-maybeString.Unwrap(); // throws NullReferenceException
+var optionString = Option<string>.None();
+optionString.Unwrap(); // throws NullReferenceException
 ```
 
-There are also extension methods for `Task<Maybe<T>>` so you can chain `Map`, `Match`, `ValueOr`, and `Unwrap` to your tasks.
+There are also extension methods for `Task<Option<T>>` so you can chain `Map`, `Match`, `ValueOr`, and `Unwrap` to your tasks.
 ```Csharp
-var userBalance = GetUser() // GetUser returns a Task<Maybe<User>>
+var userBalance = GetUser() // GetUser returns a Task<Option<User>>
                     .Map(user => bankService.GetAccounts(user.Id))
                     .Map(accounts => accounts.Sum(a => a.Balance))
                     .ValueOr(0m);
@@ -150,7 +148,7 @@ if (userRoleResult.IsErr(out var roleError))
 emailService.NotifyUser(user.Email);
 ```
 
-As with `Maybe`, there are some extensions in Task to be able to chain methods:
+As with `Option`, there are some extensions in Task to be able to chain methods:
 ```Csharp
 public async IResult Post([FromBody] UserPayload payload)
     => await CreateUser(payload).Match<IResult>(
@@ -162,10 +160,10 @@ public async IResult Post([FromBody] UserPayload payload)
 ```
 
 ## Design philosophy
-The idea behind this small package was to provide `Option`/`Maybe`/`Result` monads that work idiomatically with C#, whithout losing the essence of them.
+The idea behind this small package was to provide `Option`/`Option`/`Result` monads that work idiomatically with C#, whithout losing the essence of them.
 
 In order to achieve this, an approach of *Explicit better than implicit* was used:
-- When working with `Maybe`, minimize the posibility of `NullReferenceException` by limiting the options to get the value out, enforcing the developer to handle all the cases.
+- When working with `Option`, minimize the posibility of `NullReferenceException` by limiting the options to get the value out, enforcing the developer to handle all the cases.
 - When working with `Result`, minimize the risk of unforseen consequences (λ) by encouraging to use the `Match` statement.
 - Encourage the usage of Error values, let it be records with some payload or enums, that provide useful information and force the developer to take action for each one of them. By being explicit in what kind of errors can pop out, the developer is forced to handle all the cases than can go wrong and not rely on catch blocks.
 
@@ -198,7 +196,7 @@ Because of the limitations of C#, some things cannot be achieved. Here's a small
     }
     ```
 - `Result<Unit, _>` feels weird, as you have to manually do `Result<Unit, _>.Ok(default)` or `Result<Unit, _>.Ok(new Unit())`. No workaround for this I'm afraid.
-- Early returns feel off. I would've loved to have something similar to [Rust's question mark](https://doc.rust-lang.org/rust-by-example/std/result/question_mark.html), but `Maybe.IsNone` and `Result.IsErr` are the closest things I could think of.
+- Early returns feel off. I would've loved to have something similar to [Rust's question mark](https://doc.rust-lang.org/rust-by-example/std/result/question_mark.html), but `Option.IsSome` and `Result.IsErr` are the closest things I could think of.
 - The absence of `union types`/`discriminated unions`/`closed enums` make managing the different options underwhelming and unreliable if you are not careful. If you have a method like this:
 ```Csharp
 enum ProcessError
@@ -251,7 +249,7 @@ public void Run()
 ## Usage inside Entity Framework Core
 **This uses the internal EF Api**
 
-The project OptionTypes.Ef contains the `ValueConverters` needed to map the `Maybe<T>` type to the Entity Framework columns. 
+The project OptionTypes.Ef contains the `ValueConverters` needed to map the `Option<T>` type to the Entity Framework columns. 
 
 In the `OnModelCreating` method overriden in your DbContext, call `AddOptionTypeConverters`.
 This will add all the converters needed in your model.

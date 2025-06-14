@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net8.0</TargetFrameworks>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<LangVersion>11.0</LangVersion>
+		<Nullable>enable</Nullable>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<Title>Funzo.Serialization</Title>
+		<Authors>Alejandro-SB</Authors>
+		<Description>Contains serialization helpers for Result, Option and Union types</Description>
+		<PackageProjectUrl>https://github.com/Alejandro-SB/Funzo</PackageProjectUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/Alejandro-SB/Funzo</RepositoryUrl>
+		<PackageTags>functional programming;option types;monad;union types;discriminated unions;result</PackageTags>
+		<AssemblyVersion>$(AssemblyVersion)</AssemblyVersion>
+		<FileVersion>$(AssemblyVersion)</FileVersion>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<Version></Version>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Funzo\Funzo.csproj" />
+	</ItemGroup>
+
+</Project>

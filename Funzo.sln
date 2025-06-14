@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33209.295
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptionTypes", "OptionTypes\OptionTypes.csproj", "{0F8708B6-C99C-40F4-8260-1A17749784C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Funzo", "Funzo\Funzo.csproj", "{0F8708B6-C99C-40F4-8260-1A17749784C4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptionTypes.Ef", "OptionTypes.Ef\OptionTypes.Ef.csproj", "{076BB13E-C9A7-42EC-9672-EDE66E47031B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funzo.Test", "Funzo.Test\Funzo.Test.csproj", "{06F30F25-CADB-4374-AAB4-1FCA1DD05324}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptionTypes.Test", "OptionTypes.Test\OptionTypes.Test.csproj", "{06F30F25-CADB-4374-AAB4-1FCA1DD05324}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funzo.Generator", "Funzo.Generator\Funzo.Generator.csproj", "{F9F9C1C6-C622-4FAA-930B-3360625D1E63}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funzo.Serialization", "Funzo.Serialization\Funzo.Serialization.csproj", "{EAF123F6-BBE1-4236-BE85-AA15E6546FCE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +21,18 @@ Global
 		{0F8708B6-C99C-40F4-8260-1A17749784C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F8708B6-C99C-40F4-8260-1A17749784C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F8708B6-C99C-40F4-8260-1A17749784C4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{076BB13E-C9A7-42EC-9672-EDE66E47031B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{076BB13E-C9A7-42EC-9672-EDE66E47031B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{076BB13E-C9A7-42EC-9672-EDE66E47031B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{076BB13E-C9A7-42EC-9672-EDE66E47031B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{06F30F25-CADB-4374-AAB4-1FCA1DD05324}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{06F30F25-CADB-4374-AAB4-1FCA1DD05324}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06F30F25-CADB-4374-AAB4-1FCA1DD05324}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06F30F25-CADB-4374-AAB4-1FCA1DD05324}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9F9C1C6-C622-4FAA-930B-3360625D1E63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9F9C1C6-C622-4FAA-930B-3360625D1E63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9F9C1C6-C622-4FAA-930B-3360625D1E63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9F9C1C6-C622-4FAA-930B-3360625D1E63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAF123F6-BBE1-4236-BE85-AA15E6546FCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAF123F6-BBE1-4236-BE85-AA15E6546FCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAF123F6-BBE1-4236-BE85-AA15E6546FCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAF123F6-BBE1-4236-BE85-AA15E6546FCE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
