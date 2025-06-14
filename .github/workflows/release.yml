@@ -17,7 +17,9 @@ jobs:
       run: dotnet build -c Release /p:Version=${{github.event.release.tag_name}}
     - name: Test
       run: dotnet test -c Release --no-build
-    - name: Pack nugets
-      run: dotnet pack -c Release --no-build --output . /p:PackageVersion=${{github.event.release.tag_name}}
+    - name: Pack Funzo
+      run: dotnet pack Funzo -c Release --no-build --output . /p:PackageVersion=${{github.event.release.tag_name}}
+    - name: Pack Serialization
+      run: dotnet pack Funzo.Serialization -c Release --no-build --output . /p:PackageVersion=${{github.event.release.tag_name}}
     - name: Push to NuGet
       run: dotnet nuget push "*.nupkg" --api-key ${{secrets.nuget_api_key}} --source https://api.nuget.org/v3/index.json
