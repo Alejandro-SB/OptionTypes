@@ -9,7 +9,7 @@ internal class ResultRepresentation<TOk, TErr>
 
 internal class ResultOkRepresentation<TOk>
 {
-    public static bool IsOk => true;
+    public bool IsOk => true;
     public TOk Ok { get; set; }
 
     public ResultOkRepresentation(TOk ok)
@@ -20,7 +20,7 @@ internal class ResultOkRepresentation<TOk>
 
 internal class ResultErrRepresentation<TErr>
 {
-    public static bool IsOk => false;
+    public bool IsOk => false;
     public TErr Err { get; set; }
 
     public ResultErrRepresentation(TErr err)
