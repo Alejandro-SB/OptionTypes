@@ -1,7 +1,7 @@
-﻿[![NuGet](https://img.shields.io/nuget/v/OptionTypes?label=OptionTypes)](https://www.nuget.org/packages/OptionTypes/)
-[![NuGet](https://img.shields.io/nuget/v/OptionTypes.Ef?label=OptionTypes.Ef)](https://www.nuget.org/packages/OptionTypes.Ef/)
+﻿[![NuGet](https://img.shields.io/nuget/v/Funzo?label=Funzo)](https://www.nuget.org/packages/Funzo/)
+[![NuGet](https://img.shields.io/nuget/v/Funzo.Serialization?label=Funzo.Serialization)](https://www.nuget.org/packages/Funzo.Serialization/)
 
-# OptionTypes
+# Funzo
 
 ## Contents
 - [Description](#description)
@@ -13,17 +13,25 @@
 - [What's missing](#whats-missing)
 
 
+## Where do we come from
+This package was previously called OptionTypes, but given that now more things are being added, I think a new name could fit better. So Funzo it is. Sounds fine.
+Apart from the name, the `Maybe<T>` class was renamed to `Option<T>`. It is more common than `Maybe<T>` so I thought it would be better for people to identity it.
+
 ## Description
-_OptionTypes_ is a package to use some useful monads in C#. It contains 2 classes:
+_Funzo_ allows the developer to use some classes more commonly used in functional programming for error-proof programming and better type definition. It contains 4 classes:
+
+- The `Unit` class represents an empty class. Because functions always return something, `Unit` is the equivalent to `void`
 
 - The `Option<T>` class allows to create an item of type T that may have no value. This value cannot be accessed in an unsafe manner by design, making really easy to completely remove null references from your code and reducing the number of `NullReferenceException` exceptions thrown.
 
-- The `Result` class represents an operation that has been completed. This reduces the number of `try/catch` blocks needed to manage application flow, making error management explicit and ending with more reliable code.
+- The `Result<TOk, TErr>` class represents an operation that has been completed. This reduces the number of `try/catch` blocks needed to manage application flow, making error management explicit and ending with more reliable code.
+
+- The `Union<T1, T2>` and all its siblings allows you to create union types. This is pretty similar to the [`OneOf`](https://github.com/mcintyre321/OneOf) library (in fact, heavily inspired in it), but here you will **NOT** be able to get values without checking first.
 
 ## Usage
 
 ### Unit
-Unit is a helper type to represent the absence of value (think of it as void). Because in functional programming every function returns a value, it is added here for compatibility.
+Unit is a helper type to represent the absence of a return value (think of it as void). Because in functional programming every function returns a value, it is added here for compatibility.
 
 ### Option
 
@@ -94,6 +102,13 @@ var userBalance = GetUser() // GetUser returns a Task<Option<User>>
                     .ValueOr(0m);
 ```
 
+In case you want to do something with the value first, you can use the `Inspect` function:
+```Csharp
+Option<User> maybeUser = GetUser();
+
+user.Inspect(user => Console.WriteLine($"Retrieved user {user.Name}");
+```
+
 ### Result
 
 You can create an instance using the Ok/Err static methods:
@@ -159,12 +174,54 @@ public async IResult Post([FromBody] UserPayload payload)
         });
 ```
 
+Same as `Option`, we have 2 new methods: `Inspect` and `InspectErr` in case you want to do something with the values without actually changing anything.
+
+## Union
+Unions represent a variable that can be of several different types. At the moment, there are only unions for 5 generic types max. This was on purpose, as it usually more than 5 means you need a refactor to group some of them (at least in my opinion). If you need more, feel free to use the `Funzo.Generator` project and change the ordinality to whatever you need.
+
+You can create an instance by using the constructor or by implicitly converting from it:
+
+```Csharp
+var union = new Union<int, string, DateTime>("text");
+
+Union<int, string, DateTime> newUnion = 44;
+```
+
+To check if the union is from an specific type, you can use the `Is` method:
+
+```Csharp
+Union<int, string, DateTime> union = "text";
+
+if (union.Is<string>(out var text))
+{
+    Console.WriteLine("Union is a string");
+}
+```
+
+If you want to do different actions depending on the inner value, you can use the `Switch` or the `Match` methods:
+```Csharp
+Union<int, string, DateTime> union = DateTime.UtcNow;
+
+var typeOfDate = union.Match(
+    i => "Unix timestamp",
+    s => "ISO string",
+    d => "DateTime");
+
+union.Switch(
+    i => Console.WriteLine("Unix timestamp"),
+    s => Console.WriteLine("ISO string"),
+    d => Console.WriteLine("DateTime"))
+```
+
+Unions in this package don't have a `.Value` property and they will never have.
+
 ## Design philosophy
-The idea behind this small package was to provide `Option`/`Option`/`Result` monads that work idiomatically with C#, whithout losing the essence of them.
+The idea behind this small package was to provide `Option`/`Result` monads that work idiomatically with C#, whithout losing the essence of them.
 
 In order to achieve this, an approach of *Explicit better than implicit* was used:
 - When working with `Option`, minimize the posibility of `NullReferenceException` by limiting the options to get the value out, enforcing the developer to handle all the cases.
 - When working with `Result`, minimize the risk of unforseen consequences (λ) by encouraging to use the `Match` statement.
+- Unions don't have the possibility of getting the value explicitly, forcing the developer to use the `Is` method or `Switch`/`Match`
 - Encourage the usage of Error values, let it be records with some payload or enums, that provide useful information and force the developer to take action for each one of them. By being explicit in what kind of errors can pop out, the developer is forced to handle all the cases than can go wrong and not rely on catch blocks.
 
 ## What's missing
@@ -183,7 +240,7 @@ Because of the limitations of C#, some things cannot be achieved. Here's a small
     ```
     This can be mitigated by using `using` alias like this:
     ```Csharp
-    using CreateUserResult = OptionTypes.Result<UseCases.CreateUserReturnValue, UseCases.CreateUserError>;
+    using CreateUserResult = Funzo.Result<UseCases.CreateUserReturnValue, UseCases.CreateUserError>;
 
     public async Task<CreateUserResult> CreateUser(CreateUserPayload payload)
     {
@@ -245,11 +302,3 @@ public void Run()
     #pragma warning restore CS8524 // The switch expression does not handle some values of its input type (it is not exhaustive) involving an unnamed enum value.
 }
 ```
-
-## Usage inside Entity Framework Core
-**This uses the internal EF Api**
-
-The project OptionTypes.Ef contains the `ValueConverters` needed to map the `Option<T>` type to the Entity Framework columns. 
-
-In the `OnModelCreating` method overriden in your DbContext, call `AddOptionTypeConverters`.
-This will add all the converters needed in your model.
