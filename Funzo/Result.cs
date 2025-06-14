@@ -17,7 +17,7 @@ public class Result<TOk, TErr> : IEquatable<Result<TOk, TErr>>
     /// Creates a new instance of the <see cref="Result{TOk, TErr}"/> class as an OK result
     /// </summary>
     /// <param name="ok">The value for the OK type</param>
-    protected Result(TOk ok)
+    public Result(TOk ok)
     {
         _ok = ok;
         _isOk = true;
@@ -27,7 +27,7 @@ public class Result<TOk, TErr> : IEquatable<Result<TOk, TErr>>
     /// Creates a new instance of the <see cref="Result{TOk, TErr}"/> class as an Error result
     /// </summary>
     /// <param name="err">The value for the Error type</param>
-    protected Result(TErr err)
+    public Result(TErr err)
     {
         _err = err;
         _isOk = false;

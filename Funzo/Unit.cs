@@ -5,6 +5,10 @@
 /// </summary>
 public readonly struct Unit : IEquatable<Unit>, IComparable<Unit>
 {
+    /// <summary>
+    /// Default value for unit
+    /// </summary>
+    public static Unit Default => new();
     /// <inheritdoc/>
     public override int GetHashCode() => 0;
 
