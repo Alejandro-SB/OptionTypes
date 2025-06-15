@@ -19,6 +19,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funzo.Example", "Funzo.Example\Funzo.Example.csproj", "{B239C265-7416-4756-9D4D-35B0361DA3A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funzo.SourceGenerators", "Funzo.SourceGenerators\Funzo.SourceGenerators.csproj", "{827235C4-9711-4D73-91A3-52B5BA56320B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funzo.SourceGenerators.Test", "Funzo.SourceGenerators.Test\Funzo.SourceGenerators.Test.csproj", "{6CF5F9D7-CF12-4606-BE90-4EBE538A220A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{B239C265-7416-4756-9D4D-35B0361DA3A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B239C265-7416-4756-9D4D-35B0361DA3A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B239C265-7416-4756-9D4D-35B0361DA3A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{827235C4-9711-4D73-91A3-52B5BA56320B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{827235C4-9711-4D73-91A3-52B5BA56320B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{827235C4-9711-4D73-91A3-52B5BA56320B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{827235C4-9711-4D73-91A3-52B5BA56320B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CF5F9D7-CF12-4606-BE90-4EBE538A220A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CF5F9D7-CF12-4606-BE90-4EBE538A220A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CF5F9D7-CF12-4606-BE90-4EBE538A220A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CF5F9D7-CF12-4606-BE90-4EBE538A220A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
