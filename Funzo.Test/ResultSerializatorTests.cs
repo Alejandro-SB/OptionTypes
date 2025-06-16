@@ -1,5 +1,4 @@
 ﻿using Funzo.Serialization;
-using System;
 using System.Text.Json;
 
 namespace Funzo.Test;

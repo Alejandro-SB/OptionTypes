@@ -17,7 +17,7 @@ public class Result<TOk, TErr> : IEquatable<Result<TOk, TErr>>
     /// Creates a new instance of the <see cref="Result{TOk, TErr}"/> class as an OK result
     /// </summary>
     /// <param name="ok">The value for the OK type</param>
-    public Result(TOk ok)
+    protected Result(TOk ok)
     {
         _ok = ok;
         _isOk = true;
@@ -27,7 +27,7 @@ public class Result<TOk, TErr> : IEquatable<Result<TOk, TErr>>
     /// Creates a new instance of the <see cref="Result{TOk, TErr}"/> class as an Error result
     /// </summary>
     /// <param name="err">The value for the Error type</param>
-    public Result(TErr err)
+    protected Result(TErr err)
     {
         _err = err;
         _isOk = false;
@@ -221,4 +221,39 @@ public class Result<TOk, TErr> : IEquatable<Result<TOk, TErr>>
     {
         return _isOk ? _ok!.GetHashCode() : _err!.GetHashCode();
     }
+}
+
+/// <inheritdoc />
+public class Result<TErr> : Result<Unit, TErr>
+{
+    /// <inheritdoc />
+    protected Result() : base(Unit.Default)
+    {
+    }
+
+    /// <inheritdoc />
+    protected Result(TErr err) : base(err)
+    {
+    }
+
+    /// <summary>
+    /// Matches the result depending on the state
+    /// </summary>
+    /// <typeparam name="TOut">The final result type</typeparam>
+    /// <param name="ok">The function to execute if the operation was successful</param>
+    /// <param name="err">The function to execute if the operation failed</param>
+    /// <returns>The result of the mapping function depending on the result</returns>
+    public TOut Match<TOut>(Func<TOut> ok, Func<TErr, TOut> err) => Match(_ => ok(), err);
+
+    /// <summary>
+    /// Creates a new instance of <see cref="Result{TErr}"/> as a successful operation
+    /// </summary>
+    /// <returns>An instance of <see cref="Result{TErr}"/> as a successful operation</returns>
+    public new static Result<TErr> Ok() => new();
+    /// <summary>
+    /// Creates a new instance of <see cref="Result{TErr}"/> as a failed operation
+    /// </summary>
+    /// <param name="err">The result of the failed operation</param>
+    /// <returns>An instance of <see cref="Result{TErr}"/> as a failed operation</returns>
+    public new static Result<TErr> Err(TErr err) => new(err);
 }

@@ -21,5 +21,7 @@ jobs:
       run: dotnet pack Funzo -c Release --no-build --output . /p:PackageVersion=${{github.event.release.tag_name}}
     - name: Pack Serialization
       run: dotnet pack Funzo.Serialization -c Release --no-build --output . /p:PackageVersion=${{github.event.release.tag_name}}
+    - name: Pack Source Generators
+      run: dotnet pack Funzo.SourceGenerators -c Release --no-build --output . /p:PackageVersion=${{github.event.release.tag_name}}
     - name: Push to NuGet
       run: dotnet nuget push "*.nupkg" --api-key ${{secrets.nuget_api_key}} --source https://api.nuget.org/v3/index.json

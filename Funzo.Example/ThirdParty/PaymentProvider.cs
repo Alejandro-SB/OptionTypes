@@ -2,7 +2,7 @@
 
 namespace Funzo.Example.ThirdParty;
 
-public class PaymentProvider : IPaymentProvider
+public class PaymentProvider
 {
     private decimal _balance = 5000M;
     private readonly string[] _validAccounts = ["1", "2", "3"];
@@ -11,12 +11,12 @@ public class PaymentProvider : IPaymentProvider
     {
         if(!_validAccounts.Contains(paymentRequest.DestinationAccountId))
         {
-            return SendPaymentResult.Err(new PaymentError(new InvalidAccountError(paymentRequest.DestinationAccountId)));
+            return SendPaymentResult.Err(new InvalidAccountError(paymentRequest.DestinationAccountId));
         }
 
         if (_balance < paymentRequest.Amount)
         {
-            return new SendPaymentResult(new PaymentError(new InsufficientFundsError(_balance)));
+            return SendPaymentResult.Err(new InsufficientFundsError(_balance));
         }
 
         var now = DateTimeOffset.UtcNow;
@@ -26,11 +26,11 @@ public class PaymentProvider : IPaymentProvider
 
         if(effectiveDate > nextMonth)
         {
-            return new SendPaymentResult(new PaymentError(new InvalidEffectiveDateError(effectiveDate)));
+            return SendPaymentResult.Err(new InvalidEffectiveDateError(effectiveDate));
         }
 
         _balance -= paymentRequest.Amount;
 
-        return new SendPaymentResult(Unit.Default);
+        return SendPaymentResult.Ok();
     }
 }
