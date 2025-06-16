@@ -4,9 +4,9 @@ namespace Funzo.Example.UseCases;
 
 internal class SendPaymentHandler
 {
-    private readonly IPaymentProvider _paymentProvider;
+    private readonly PaymentProvider _paymentProvider;
 
-    public SendPaymentHandler(IPaymentProvider paymentProvider)
+    public SendPaymentHandler(PaymentProvider paymentProvider)
     {
         _paymentProvider = paymentProvider;
     }
@@ -17,17 +17,5 @@ internal class SendPaymentHandler
     }
 }
 
-public class SendPaymentResult : Result<Unit, PaymentError>
-{
-    public SendPaymentResult(Unit ok) : base(ok)
-    {
-    }
-
-    public SendPaymentResult(PaymentError err) : base(err)
-    {
-    }
-
-    public new static SendPaymentResult Ok() => new(Unit.Default);
-    public new static SendPaymentResult Err(PaymentError err) => new(err);
-
-}
+[Result]
+public partial class SendPaymentResult : Result<PaymentError>;

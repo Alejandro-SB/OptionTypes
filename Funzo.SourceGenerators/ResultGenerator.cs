@@ -12,7 +12,7 @@ namespace Funzo.SourceGenerators
     [Generator]
     public class ResultGenerator : IIncrementalGenerator
     {
-        private const string AttributeName = "Result";
+        private const string AttributeName = "ResultAttribute";
         private const string AttributeNamespace = "Funzo";
         private const string AttributeFullName = $"{AttributeNamespace}.{AttributeName}";
 
@@ -86,17 +86,26 @@ namespace {AttributeNamespace}
 
             if (!classSymbol.ContainingSymbol.Equals(classSymbol.ContainingNamespace, SymbolEqualityComparer.Default))
             {
-                CreateDiagnosticError(ResultDiagnosticDescriptors.TopLevelError);
+                CreateDiagnosticError(FunzoDiagnosticDescriptors.Result.TopLevelError);
                 return null;
             }
 
             if (classSymbol.BaseType is null || classSymbol.BaseType.Name != "Result" || classSymbol.BaseType.ContainingNamespace.ToString() != "Funzo")
             {
-                CreateDiagnosticError(ResultDiagnosticDescriptors.WrongBaseType);
+                CreateDiagnosticError(FunzoDiagnosticDescriptors.Result.WrongBaseType);
                 return null;
             }
 
             var typeArguments = classSymbol.BaseType.TypeArguments;
+
+            foreach (var typeSymbol in typeArguments)
+            {
+                if (typeSymbol.Name == nameof(Object))
+                {
+                    CreateDiagnosticError(FunzoDiagnosticDescriptors.Result.ObjectNotValidType);
+                    return null;
+                }
+            }
 
             return GenerateClassSource(classSymbol, classSymbol.BaseType.TypeParameters, typeArguments);
 
@@ -123,10 +132,11 @@ namespace {AttributeNamespace}
         private static string GenerateClassSource(INamedTypeSymbol classSymbol,
             ImmutableArray<ITypeParameterSymbol> typeParameters, ImmutableArray<ITypeSymbol> typeArguments)
         {
-            var okArgs = typeArguments[0];
-            var errArgs = typeArguments[1];
+            var isSimpleResult = typeArguments.Length == 1;
 
-            var resultGenerics = GetGenerics(typeArguments);
+            var (okArgs, errArgs) = isSimpleResult
+                ? (classSymbol.BaseType!.BaseType!.TypeArguments[0], typeArguments[0])
+                : (typeArguments[0], typeArguments[1]);
 
             var classNameWithGenericTypes = $"{classSymbol.Name}{GetOpenGenericPart(classSymbol)}";
 
@@ -137,15 +147,31 @@ namespace {classSymbol.ContainingNamespace.ToDisplayString()}
     partial class {classNameWithGenericTypes}");
 
             source.Append($@"
-    {{
-        public {classSymbol.Name}({okArgs.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} _) : base(_) {{}}
-        public {classSymbol.Name}({errArgs.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} _) : base(_) {{}}
+    {{");
 
-        public static implicit operator {classNameWithGenericTypes}({okArgs.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} _) => new {classNameWithGenericTypes}(_);
-        public static implicit operator {classNameWithGenericTypes}({errArgs.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} _) => new {classNameWithGenericTypes}(_);
+            var okDisplayName = okArgs.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+            var errDisplayName = errArgs.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
 
-        public new static {classNameWithGenericTypes} Ok({okArgs.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} ok) => new(ok);
-        public new static {classNameWithGenericTypes} Err({errArgs.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} err) => new(err);
+            if (isSimpleResult)
+            {
+                source.Append($@"
+        protected {classSymbol.Name}() : base() {{}}
+        public static implicit operator {classNameWithGenericTypes}({okDisplayName} _) => new {classNameWithGenericTypes}();
+        public new static {classNameWithGenericTypes} Ok() => new();");
+            }
+            else
+            {
+                source.Append($@"
+        protected {classSymbol.Name}({okDisplayName} _) : base(_) {{}}
+        public new static {classNameWithGenericTypes} Ok({okDisplayName} ok) => new(ok);
+        public static implicit operator {classNameWithGenericTypes}({okDisplayName} _) => new {classNameWithGenericTypes}(_);
+");
+            }
+
+            source.Append($@"
+        protected {classSymbol.Name}({errDisplayName} _) : base(_) {{}}
+        public static implicit operator {classNameWithGenericTypes}({errDisplayName} _) => new {classNameWithGenericTypes}(_);
+        public new static {classNameWithGenericTypes} Err({errDisplayName} err) => new(err);
 ");
 
             source.Append(@"    }

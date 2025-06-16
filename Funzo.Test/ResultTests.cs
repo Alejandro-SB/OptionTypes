@@ -146,6 +146,16 @@ public class ResultTests
         Assert.NotNull(test);
     }
 
+    [Fact]
+    public void Result_Can_Be_Constructed_Only_With_Err_Parameter()
+    {
+        var okResult = Result<string>.Ok();
+        var errResult = Result<string>.Err("FAILURE");
+
+        Assert.False(okResult.IsErr(out _));
+        Assert.True(errResult.IsErr(out _));
+    }
+
     private static int OkOperation(int value) => value + 1;
     private static int ErrOperation(int value) => value - 1;
     private static void Pass<T>(T _) { }

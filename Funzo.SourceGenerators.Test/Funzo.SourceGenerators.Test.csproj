@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Funzo.SourceGenerators\Funzo.SourceGenerators.csproj" />
+    <ProjectReference Include="..\Funzo.SourceGenerators\Funzo.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\Funzo\Funzo.csproj" />
   </ItemGroup>
 
