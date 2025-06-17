@@ -157,7 +157,7 @@ public class Result<TOk, TErr> : IEquatable<Result<TOk, TErr>>
     /// Converts the result into a <see cref="Option{TOk}"/>
     /// </summary>
     /// <returns><see cref="Option.Some{TOk}(TOk)" /> if the result is successful, <see cref="Option{TOk}.None"/> otherwise</returns>
-    public Option<TOk> Ok() => _isOk ? Option.Some(_ok!) : Option<TOk>.None();
+    public Option<TOk> AsOk() => _isOk ? Option.Some(_ok!) : Option<TOk>.None();
 
     /// <summary>
     /// Returns <see langword="true" /> and assigns <paramref name="err"/> when <see cref="Result{TOk, TErr}"/> is an Error, <see langword="false"/> otherwise.

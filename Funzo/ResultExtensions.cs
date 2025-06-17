@@ -12,9 +12,9 @@ public static class ResultExtensions
     /// <typeparam name="TErr"></typeparam>
     /// <param name="task">The task to extract the result from</param>
     /// <returns>A task wrapping the result</returns>
-    public static Task<Option<TOk>> Ok<TOk, TErr>(this Task<Result<TOk, TErr>> task)
+    public static Task<Option<TOk>> AsOk<TOk, TErr>(this Task<Result<TOk, TErr>> task)
     {
-        return task.Then(t => t.Ok());
+        return task.Then(t => t.AsOk());
     }
 
     /// <summary>
