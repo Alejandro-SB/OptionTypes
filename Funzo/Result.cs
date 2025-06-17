@@ -78,6 +78,22 @@ public class Result<TOk, TErr> : IEquatable<Result<TOk, TErr>>
     }
 
     /// <summary>
+    /// Returns a new <see cref="Result{T, TErr}"/> with the value corresponding to <typeparamref name="TOk"/> transformed
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="map">The transformation to apply</param>
+    /// <returns>A new <see cref="Result{T, TErr}"/> transformed</returns>
+    public Result<T, TErr> Map<T>(Func<TOk, Result<T, TErr>> map)
+    {
+        if (_isOk)
+        {
+            return map(_ok!);
+        }
+
+        return Result<T, TErr>.Err(_err!);
+    }
+
+    /// <summary>
     /// Returns a new <see cref="Result{TOk, T}"/> with the value corresponding to <typeparamref name="TErr"/> transformed
     /// </summary>
     /// <typeparam name="T"></typeparam>
@@ -91,6 +107,22 @@ public class Result<TOk, TErr> : IEquatable<Result<TOk, TErr>>
         }
 
         return Result<TOk, T>.Err(map(_err!));
+    }
+
+    /// <summary>
+    /// Returns a new <see cref="Result{TOk, T}"/> with the value corresponding to <typeparamref name="TErr"/> transformed
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="map">The transformation to apply</param>
+    /// <returns>A new <see cref="Result{TOk, T}"/> transformed</returns>
+    public Result<TOk, T> MapErr<T>(Func<TErr, Result<TOk, T>> map)
+    {
+        if (_isOk)
+        {
+            return Result<TOk, T>.Ok(_ok!);
+        }
+
+        return map(_err!);
     }
 
     /// <summary>
@@ -249,7 +281,7 @@ public class Result<TErr> : Result<Unit, TErr>
     /// Creates a new instance of <see cref="Result{TErr}"/> as a successful operation
     /// </summary>
     /// <returns>An instance of <see cref="Result{TErr}"/> as a successful operation</returns>
-    public new static Result<TErr> Ok() => new();
+    public static Result<TErr> Ok() => new();
     /// <summary>
     /// Creates a new instance of <see cref="Result{TErr}"/> as a failed operation
     /// </summary>
